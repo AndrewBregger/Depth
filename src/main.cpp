@@ -1,27 +1,56 @@
-#include "common.hpp"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <thread>
+
+#include "common.hpp"
+#include "window.hpp"
+#include "input.hpp"
+#include "events.hpp"
+
+void render() {
+	glBegin(GL_TRIANGLE_STRIP);
+
+	glColor4f(1.0, 0.0, 0.0, 1.0);
+	glVertex3f(0.5, -0.5, 0.0);
+
+	glVertex3f(-0.5, -0.5, 0.0);
+	
+	glVertex3f(0.5, 0.5, 0.0);
+
+	glVertex3f(-0.5, 0.5, 0.0);
+
+	glEnd();
+}
+
+/// main render loop.
+void gmain() {
+	auto window = win::Window();
+
+	window.make_current();
+
+	event::EventManager emanager(&window);
+
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+
+	while(!glfwWindowShouldClose(window.get_handle())) {
+
+		emanager.process_events();
+
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		render();
+
+		window.swapbuffers();
+	}
+}
 
 int main() {
 	utils::logging::init_logger();
 
-	glfwInit();
-
-	auto window = glfwCreateWindow(500, 400, "Depth", nullptr, nullptr);
-
-	glfwMakeContextCurrent(window);
-
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	std::thread main_loop(gmain);	
 	
-	while(!glfwWindowShouldClose(window)) {
-		glfwPollEvents();
+	main_loop.join();
 
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glfwSwapBuffers(window);
-	}
-
-	glfwDestroyWindow(window);
-	glfwTerminate();
 
 	return 0;
 }

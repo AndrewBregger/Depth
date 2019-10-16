@@ -1,12 +1,14 @@
 #ifndef COMMON_HPP_
 #define COMMON_HPP_
 
-#include <string>
+#include <cassert>
 #include <cstdint>
+#include <string>
 #include <vector>
 #include <unordered_map>
 #include <iostream>
 #include <memory>
+#include <utility>
 
 #include "utils/logging.hpp"
 
@@ -67,6 +69,11 @@ inline void log_debug(const Msg& msg, Args... args) {
 template <typename Msg, typename... Args>
 inline void log_trace(const char* function, u32 line, const Msg& msg, Args... args) {
 	logger->trace(function, line, msg, args...);
+}
+
+template <typename T, typename... Args>
+T* alloc(Args... args) {
+	return new T(std::forward(args...));
 }
 
 #endif
