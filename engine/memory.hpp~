@@ -1,0 +1,13 @@
+#ifndef MEMORY_HPP_
+#define MEMORY_HPP_
+
+namespace mem {
+  template <typename T>
+  class Allocator {
+  public:
+  private:
+  };
+}
+
+
+#endif
