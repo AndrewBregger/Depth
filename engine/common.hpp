@@ -71,6 +71,19 @@ inline void log_trace(const char* function, u32 line, const Msg& msg, Args... ar
 	logger->trace(function, line, msg, args...);
 }
 
+template <typename Type, template <typename> typename Allocator, typename... Args>
+Type* allocate(Allocator<Type>& alloc, Args... args) {
+	Type* ptr = alloc.allocate();
+	if(ptr)
+		return new(ptr) Type(args...);
+	return nullptr;
+}
+template <typename Type, template <typename> typename Allocator>
+void deallocate(Allocator<Type>& alloc, Type*& ptr) {
+	alloc.deallocate(ptr);
+	ptr = nullptr;
+}
+
 template <typename T, typename... Args>
 T* alloc(Args... args) {
 	return new T(std::forward(args...));
@@ -80,5 +93,6 @@ template <typename T>
 T* allocate(size_t num) {
 	return new T[num];
 }
+
 
 #endif

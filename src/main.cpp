@@ -1,11 +1,10 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <thread>
 
 #include "common.hpp"
 #include "window.hpp"
 #include "input.hpp"
 #include "events.hpp"
+#include "memory.hpp"
 
 void render() {
 	glBegin(GL_TRIANGLE_STRIP);
@@ -31,6 +30,10 @@ void gmain() {
 	event::EventManager emanager(&window);
 
 	glClearColor(1.0, 1.0, 1.0, 1.0);
+
+	struct Vertex {
+		f32 x, y, z;
+	};
 
 	while(!glfwWindowShouldClose(window.get_handle())) {
 

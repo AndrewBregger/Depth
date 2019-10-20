@@ -1,7 +1,5 @@
 #include "window.hpp"
 
-#include <glad/glad.h>
-
 namespace win {
 
 	bool Window::glfw_initiated = false;
