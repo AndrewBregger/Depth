@@ -122,7 +122,7 @@ enum PixelFormat {
 	Red,
 	Alpha,
 	Depth,
-	Stincel,
+	Stencil,
 	Rgb,
 	Rgba,
 };

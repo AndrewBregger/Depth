@@ -7,6 +7,8 @@ namespace gfx {
         handle = 0;
         width = width;
         height = height;
+
+        initialize(image.buffer, image.format);
     }
     
     /// Allocates an emtpy texture on the gpu
@@ -14,6 +16,8 @@ namespace gfx {
         handle = 0;
         width = width;
         height = height;
+
+        initialize(nullptr, format);
     }
 
     /// binds this texture to texture0
@@ -22,15 +26,15 @@ namespace gfx {
     }
 
     /// binds this texture to GL_TEXTURE0 + offset
-    void Texture::activate_to(u32 offset = 0) {
+    void Texture::activate_to(u32 offset) {
         glCheck(glActiveTexture(GL_TEXTURE0 + offset));
     }
 
-    void Texture::bind() {
+    inline void Texture::bind() {
         glCheck(glBindTexture(GL_TEXTURE_2D, handle));
     }
 
-    void Texture::unbind() {
+    inline void Texture::unbind() {
         glCheck(glBindTexture(GL_TEXTURE_2D, 0));
     }
 
@@ -42,7 +46,7 @@ namespace gfx {
 
         glCheck(glGenTextures(1, &handle));
 
-        glCheck(glBindTexture(GL_TEXTURE_2D, handle));
+        bind();
 
         // Set texture options.
         glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
@@ -52,8 +56,12 @@ namespace gfx {
 
         // consider making PixelFormat a struct and the value is the enum.
         // glTexImage2D(GL_TEXTURE_2D, 0, format.gl_format());
+        
+        glCheck(glTexImage2D(GL_TEXTURE_2D, 0, gl_pixel_format(format), width, height, 0, 
+            gl_pixel_format(format), GL_UNSIGNED_BYTE, buffer));
+        glCheck(glBindTexture(GL_TEXTURE_2D, handle));
 
-        glTexImage2D(GL_TEXTURE_2D, 0, gl_pixel_format(format));
+        unbind();
     }
 
 }

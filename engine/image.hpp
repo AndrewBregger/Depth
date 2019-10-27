@@ -37,7 +37,7 @@ namespace res {
 		
 		/// build an image from the a file
 		/// file_path: the path to the file.
-		static Image&& from_file(const std::string& file_path);
+		static Image from_file(const std::string& file_path);
 
 		inline u32 get_width();
 

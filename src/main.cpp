@@ -7,23 +7,33 @@
 #include "listener/camera_listener.hpp"
 #include "listener/window_listener.hpp"
 
+#include "image.hpp"
+#include "texture.hpp"
+
 void render() {
 	glBegin(GL_TRIANGLE_STRIP);
 
-	glColor4f(1.0, 0.0, 0.0, 1.0);
+	// glColor4f(1.0, 0.0, 0.0, 1.0);
 	glVertex3f(0.5, -0.5, 0.0);
+	glTexCoord2f(1.0, 0.0);
 
 	glVertex3f(-0.5, -0.5, 0.0);
+	glTexCoord2f(0.0, 0.0);
 	
 	glVertex3f(0.5, 0.5, 0.0);
+	glTexCoord2f(1.0, 1.0);
 
 	glVertex3f(-0.5, 0.5, 0.0); 
+	glTexCoord2f(0.0, 1.0);
 	glEnd();
 }
 
 /// main render loop.
 void gmain() {
+	LOG_INFO("App Start");
 	auto window = win::Window();
+
+	LOG_INFO("App Setup");
 	view::Camera camera;
 	camera.set_position(glm::vec2(0, 0));
 	camera.set_rotation(0.0f);
@@ -46,16 +56,27 @@ void gmain() {
 				c->camera->set_size(size.x, size.y);
 			});
 
+	LOG_INFO("Post Setup");
+
+	res::Image image = res::Image::from_file("./res/test.jpg");
+
+	gfx::Texture texture(image);
 
 	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glEnable(GL_TEXTURE_2D);
 
 	while(!glfwWindowShouldClose(window.get_handle())) {
 
 		emanager.process_events();
 
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		texture.activate();
+		texture.bind();
 		
 		render();
+
+		texture.unbind();
 
 		window.swapbuffers();
 	}

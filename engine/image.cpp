@@ -24,7 +24,7 @@ namespace res {
 		delete buffer;
 	}
 	
-	Image&& Image::from_file(const std::string& file_path) {
+	Image Image::from_file(const std::string& file_path) {
 		auto file = Platform::read_entire_binary_file(file_path);
 
 		i32 x, y, channels;
@@ -37,7 +37,7 @@ namespace res {
 			format = PixelFormat::Rgba;
 
 		// Even though this will have return value optimization, I am being explicit.
-		return std::move(Image(x, y, buffer, format));
+		return Image(x, y, buffer, format);
 	}
 
 	Image Image::operator= (const Image& other) {

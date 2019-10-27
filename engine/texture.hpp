@@ -20,9 +20,9 @@ namespace gfx {
             /// binds this texture to GL_TEXTURE0 + offset
             void activate_to(u32 offset = 0);
 
-            void bind();
+            inline void bind();
 
-            void unbind();
+            inline void unbind();
         private:
             
             void initialize(u8* buffer, PixelFormat format);
