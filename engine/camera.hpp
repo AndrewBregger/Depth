@@ -7,12 +7,12 @@
 
 namespace view {
 #ifdef SINGLE_CAMERA
-	class OrthoCamera : public util::Singleton<OrthoCamera> {
+	class Camera : public util::Singleton<OrthoCamera> {
 #else
-	class OrthoCamera {
+	class Camera {
 #endif
 		public:
-			OrthoCamera();
+			Camera();
 			
 			void update_view();
 
@@ -42,28 +42,28 @@ namespace view {
 			glm::mat4 projection;
 	};
 
-	inline void OrthoCamera::set_position(const glm::vec2& position) {
+	inline void Camera::set_position(const glm::vec2& position) {
 		this->position = position;
 	}
 
-	inline glm::vec2 OrthoCamera::get_position() const {
+	inline glm::vec2 Camera::get_position() const {
 		return position;
 	}
 
-	inline void OrthoCamera::set_rotation(f32 theta) {
+	inline void Camera::set_rotation(f32 theta) {
 		this->theta = theta;
 	}
 
 
-	inline f32 OrthoCamera::get_rotation() const {
+	inline f32 Camera::get_rotation() const {
 		return theta;
 	}
 
-	inline void OrthoCamera::set_size(u32 width, u32 height) {
+	inline void Camera::set_size(u32 width, u32 height) {
 		size = glm::ivec2(width, height);
 	}
 	
-	inline const glm::mat4& OrthoCamera::get_projection() const {
+	inline const glm::mat4& Camera::get_projection() const {
 		return projection;
 	}
 

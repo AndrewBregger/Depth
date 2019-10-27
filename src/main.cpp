@@ -2,9 +2,8 @@
 
 #include "common.hpp"
 #include "window.hpp"
-#include "input.hpp"
-#include "events.hpp"
-#include "memory.hpp"
+#include "events/input.hpp"
+#include "events/events.hpp"
 #include "listener/camera_listener.hpp"
 #include "listener/window_listener.hpp"
 
@@ -25,7 +24,7 @@ void render() {
 /// main render loop.
 void gmain() {
 	auto window = win::Window();
-	view::OrthoCamera camera;
+	view::Camera camera;
 	camera.set_position(glm::vec2(0, 0));
 	camera.set_rotation(0.0f);
 

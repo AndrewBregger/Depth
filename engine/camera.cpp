@@ -1,12 +1,12 @@
-#include "ortho_camera.hpp"
+#include "camera.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace view {
-	OrthoCamera::OrthoCamera() = default;
+	Camera::Camera() = default;
 
 
-	void OrthoCamera::update_view() {
+	void Camera::update_view() {
 		origin = glm::vec2(
 					position.x - size.x / 2,
 					position.y - size.y / 2

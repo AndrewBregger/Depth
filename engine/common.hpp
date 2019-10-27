@@ -3,12 +3,16 @@
 
 #include <cassert>
 #include <cstdint>
-#include <string>
-#include <vector>
-#include <unordered_map>
+
 #include <iostream>
 #include <memory>
 #include <utility>
+
+#include <vector>
+#include <string>
+#include <unordered_map>
+
+#include <glm/glm.hpp>
 
 #include "utils/logging.hpp"
 
@@ -71,6 +75,15 @@ inline void log_trace(const char* function, u32 line, const Msg& msg, Args... ar
 	logger->trace(function, line, msg, args...);
 }
 
+
+std::ostream& operator<< (std::ostream& _out, const glm::vec4& _v);
+std::ostream& operator<< (std::ostream& _out, const glm::vec3& _v);
+std::ostream& operator<< (std::ostream& _out, const glm::vec2& _v);
+
+void glCheck_(const char* file, const char* function, u32 line);
+
+#define glCheck(fn) do { fn; glCheck_(__FILE__, __FUNCTION__, __LINE__); } while(0)
+
 template <typename Type, template <typename> typename Allocator, typename... Args>
 Type* allocate(Allocator<Type>& alloc, Args... args) {
 	Type* ptr = alloc.allocate();
@@ -90,9 +103,32 @@ T* alloc(Args... args) {
 }
 
 template <typename T>
+void dealloc(T* ptr) {
+	delete ptr;
+}
+
+template <typename T>
 T* allocate(size_t num) {
 	return new T[num];
 }
 
+template <typename T>
+void deallocate(T*& ptr) {
+	delete[] ptr;
+	ptr = nullptr;
+}
+
+enum PixelFormat {
+	Red,
+	Alpha,
+	Depth,
+	Stincel,
+	Rgb,
+	Rgba,
+};
+
+u32 gl_pixel_format(PixelFormat);
+
+PixelFormat pixel_format(u32 format);
 
 #endif
