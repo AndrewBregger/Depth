@@ -34,10 +34,13 @@ namespace res {
 		Image operator= (const Image& other);
 
 		Image operator= (Image&& other);
-		
+
 		/// build an image from the a file
 		/// file_path: the path to the file.
 		static Image from_file(const std::string& file_path);
+		
+        
+        Image convert_to(PixelFormat format);
 
 		inline u32 get_width();
 

@@ -13,12 +13,12 @@ namespace gfx {
 
         handle = glCreateProgram();
         
-        if(!build_shader(vs_file_path, GL_VERTEX_SHADER)) return;
+        if(!build_shader(vs_file_path, GL_VERTEX_SHADER)) exit(1);
 
         if(gs_file_path)
-            if(!build_shader(gs_file_path.value(), GL_GEOMETRY_SHADER)) return;
+            if(!build_shader(gs_file_path.value(), GL_GEOMETRY_SHADER)) exit(1);
 
-        if(!build_shader(fs_file_path, GL_FRAGMENT_SHADER)) return;
+        if(!build_shader(fs_file_path, GL_FRAGMENT_SHADER)) exit(1);
 
         glLinkProgram(handle);
         i32 success;
@@ -29,6 +29,8 @@ namespace gfx {
         if(!success) {
             glad_glGetProgramInfoLog(handle, 512, NULL, log);
             LOG_ERR("Program Linking Failed: {}", log);
+            std::cout << log << std::endl;
+			exit(1);
         }
     }
 
@@ -54,7 +56,7 @@ namespace gfx {
     i32 Shader::get_uniform(const std::string& name) {
         auto iter = uniforms.find(name);
         if(iter == uniforms.end()) {
-            LOG_ERR("Unrecognized uniform: {}", name);
+            LOG_ERR("Shader: {} | Unrecognized uniform: {}", this->name, name);
             return -1;
         }
         return iter->second;
@@ -96,10 +98,25 @@ namespace gfx {
         if(!success) {
             glGetShaderInfoLog(shader , 512, NULL, log);
             LOG_ERR("{} {} Failed: {}", type_string, file_path, log);
-            return false;
+            std::cout << log << std::endl;
+			return false;
         }
 
         glAttachShader(handle, shader);
         return true;
+    }
+
+    void Shader::add_texture(const std::string& name, const Texture& texture) {
+        auto loc = uniform_location(name);
+
+        if(loc == -1) {
+            LOG_ERR("Shader: {} | Unrecognized uniform: {}", this->name, name);
+            return;
+        }
+
+        use();
+        glCheck(glUniform1i(loc, (i32) texture.id()));
+        uniforms[name] = loc;
+        unuse();
     }
 }

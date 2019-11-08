@@ -4,6 +4,8 @@
 #include "common.hpp"
 #include "image.hpp"
 
+#include <glad/glad.h>
+
 namespace gfx {
     class Texture {
         public:
@@ -20,9 +22,14 @@ namespace gfx {
             /// binds this texture to GL_TEXTURE0 + offset
             void activate_to(u32 offset = 0);
 
-            inline void bind();
+            inline void bind() { glCheck(glBindTexture(GL_TEXTURE_2D, handle)); }
 
-            inline void unbind();
+            inline void unbind()  { Texture::unbind_texture(); }
+
+            inline static void unbind_texture() { glCheck(glBindTexture(GL_TEXTURE_2D, 0)); }
+
+            inline u32 id() { return handle; }
+            inline u32 id() const { return handle; }
         private:
             
             void initialize(u8* buffer, PixelFormat format);

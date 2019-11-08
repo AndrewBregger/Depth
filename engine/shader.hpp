@@ -4,6 +4,7 @@
 #include "common.hpp"
 
 #include <unordered_map>
+#include "texture.hpp"
 
 namespace gfx {
     class Shader {
@@ -28,6 +29,11 @@ namespace gfx {
             /// returns the value of uniform name
             /// name: the name of the uniform
             i32 get_uniform(const std::string& name);
+
+
+            void add_texture(const std::string& name, const Texture& texture);
+
+            inline u32 id() { return handle; }
 
         private:
             /// returns the location of this uniform for reference

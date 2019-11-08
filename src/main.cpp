@@ -9,23 +9,22 @@
 
 #include "image.hpp"
 #include "texture.hpp"
+#include "shader.hpp"
 
-void render() {
-	glBegin(GL_TRIANGLE_STRIP);
+extern std::shared_ptr<utils::logging::Logger> logger;
 
-	// glColor4f(1.0, 0.0, 0.0, 1.0);
-	glVertex3f(0.5, -0.5, 0.0);
-	glTexCoord2f(1.0, 0.0);
+void render(gfx::Shader& shader, u32 vao, u32 vbo, u32 ibo) {
+	glCheck(shader.use());
+	glCheck(glBindVertexArray(vao));
+		
+	glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
 
-	glVertex3f(-0.5, -0.5, 0.0);
-	glTexCoord2f(0.0, 0.0);
-	
-	glVertex3f(0.5, 0.5, 0.0);
-	glTexCoord2f(1.0, 1.0);
+	glCheck(glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, nullptr));
 
-	glVertex3f(-0.5, 0.5, 0.0); 
-	glTexCoord2f(0.0, 1.0);
-	glEnd();
+	glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
+	glCheck(glBindVertexArray(0));
+	glCheck(shader.unuse());
 }
 
 /// main render loop.
@@ -60,22 +59,68 @@ void gmain() {
 
 	res::Image image = res::Image::from_file("./res/test.jpg");
 
+	// image = image.convert_to(PixelFormat::Rgba);
+
 	gfx::Texture texture(image);
 
+	gfx::Shader shader("quad", "./res/shaders/quad_vs.glsl", "./res/shaders/quad_fs.glsl",
+				std::optional("./res/shaders/quad_gs.glsl"));
+
+
+	u32 vao, vbo, ibo;
+	glCheck(glGenVertexArrays(1, &vao));
+
+	glCheck(glGenBuffers(1, &vbo));
+	glCheck(glGenBuffers(1, &ibo));
+
+	glCheck(glBindVertexArray(vao));
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	struct Vertex {
+		glm::vec4 quadInfo;
+		glm::vec4 texInfo;
+		glm::vec4 colorMask;
+	};
+
+	Vertex data[1] = {
+		Vertex {
+			.quadInfo	= {-0.5, -0.5, 1.0, 1.0},
+			.texInfo	= {0.0, 0.0, 1.0, 1.0},
+			.colorMask	= {1.0, 1.0, 1.0, 1.0}
+		}
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex), data, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	u32 indicies[] = {0};
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32), indicies, GL_STATIC_DRAW);
+
+	u64 attributeSizes[] = {4, 4, 4};
+	u64 stride = 0;
+
+	for(u32 i = 0; i < 3; ++i) {
+		glVertexAttribPointer(i, attributeSizes[i], GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (stride * sizeof(f32)));
+		glEnableVertexAttribArray(i);
+		stride += attributeSizes[i];
+	}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);	
+	glCheck(glBindVertexArray(0));
+
 	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glEnable(GL_TEXTURE_2D);
+
+	texture.activate();
+
+	shader.add_texture("tex", texture);
 
 	while(!glfwWindowShouldClose(window.get_handle())) {
-
 		emanager.process_events();
+		glCheck(glClear(GL_COLOR_BUFFER_BIT));
 
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		texture.activate();
 		texture.bind();
-		
-		render();
-
+		render(shader, vao, vbo, ibo);
 		texture.unbind();
 
 		window.swapbuffers();
@@ -85,9 +130,13 @@ void gmain() {
 int main() {
 	utils::logging::init_logger();
 
-	std::thread main_loop(gmain);	
+	logger->send_to_console(true);
+
+	gmain();
+
+	// std::thread main_loop(gmain);	
 	
-	main_loop.join();
+	// main_loop.join();
 
 	return 0;
 }

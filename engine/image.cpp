@@ -31,13 +31,26 @@ namespace res {
 
 		u8* buffer = stbi_load_from_memory(file.content, file.length, &x, &y, &channels, STBI_rgb_alpha);
 
-		auto format = PixelFormat::Rgb;
-		
-		if(channels == 4)
-			format = PixelFormat::Rgba;
+        auto image = allocate<u8>(x * y * 4);
 
-		// Even though this will have return value optimization, I am being explicit.
-		return Image(x, y, buffer, format);
+        memcpy(image, buffer, x * y * 4);
+
+        stbi_image_free(buffer);
+
+		// PixelFormat format;
+        // switch (channels) {
+        //     case 3:
+        //         format = PixelFormat::Rgb;
+        //         break;
+        //     case 4:
+		// 	    format = PixelFormat::Rgba;
+        //         break;
+        //     default:
+        //         ///// AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+        //         break;
+        // }
+
+		return Image(x, y, image, PixelFormat::Rgba);
 	}
 
 	Image Image::operator= (const Image& other) {
@@ -59,4 +72,52 @@ namespace res {
 
 		return *this;
 	}
+    
+    /// @TODO: Why is this causing a double free error on the window?
+    Image Image::convert_to(PixelFormat format) {
+        if (this->format == format) {
+            auto size = width * height * (format == PixelFormat::Rgb ? 3: 4);
+            u8* buffer = allocate<u8>(size);
+            memcpy(buffer, this->buffer, size);
+            return Image(width, height, buffer, format);
+        }
+        else {
+            if (this->format == PixelFormat::Red ||
+                this->format == PixelFormat::Depth ||
+                this->format == PixelFormat::Stencil) {
+                LOG_ERR("Unimplemented Image conversion: {} -> {}", this->format, format);
+                exit(1);
+            }
+
+            switch (format) {
+                case PixelFormat::Rgb: {
+                   u8* buffer = allocate<u8>(width * height * 3);
+                   for (auto i = 0; i < width; ++i) {
+                       for (auto j = 0; j < height; ++j) {
+                            // only copy the rgb channels
+                            buffer[j * width + i + 0] = this->buffer[j * width + i + 0];
+                            buffer[j * width + i + 1] = this->buffer[j * width + i + 1];
+                            buffer[j * width + i + 2] = this->buffer[j * width + i + 2];
+                       }
+                   }
+                } break;
+                case PixelFormat::Rgba: {
+                   u8* buffer = allocate<u8>(width * height * 4); 
+                   for (auto i = 0; i < width; ++i) {
+                       for (auto j = 0; j < height; ++j) {
+                            // only copy the rgb channels
+                            buffer[j * width + i + 0] = this->buffer[j * width + i + 0];
+                            buffer[j * width + i + 1] = this->buffer[j * width + i + 1];
+                            buffer[j * width + i + 2] = this->buffer[j * width + i + 2];
+                            buffer[j * width + i + 3] = 1.0;
+                       }
+                   }
+                   return Image(width, height, buffer, format);
+                } break;
+                default:
+                    LOG_WARN("Unimplemented image coversion: {}", format);
+                    return Image(width, height, nullptr, format);
+            }
+        }
+    }
 }

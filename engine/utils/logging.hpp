@@ -21,18 +21,22 @@ namespace utils {
 					if(to_console) {
 						spdlog::warn(msg, args...);
 					}
-					else {
-						logger->warn(msg.c_str(), args...);
-					}
+					logger->warn(msg.c_str(), args...);
 				}
 
 				template<typename... Args>
 				void error(const std::string& msg, Args... args) {
+					if(to_console || err_to_console) {
+						spdlog::error(msg, args...);
+					}
 					logger->error(msg.c_str(), args...);
 				}
 
 				template <typename... Args>
 				void debug(const std::string& msg, Args... args) {
+					if(to_console) {
+						spdlog::error(msg, args...);
+					}
 					logger->debug(msg.c_str(), args...);
 				}
 

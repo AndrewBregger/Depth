@@ -8,10 +8,11 @@ File<char> Platform::read_entire_file(const std::string& file_path) {
 	FILE* file = fopen(file_path.c_str(), "r");
 
 	if(file) {
-		auto len = fseek(file, 0, SEEK_END);	
-		buffer = allocate<char>(len + 1);
+		fseek(file, 0, SEEK_END);	
+		u32 len = ftell(file);
 		rewind(file);
 
+		buffer = allocate<char>(len + 1);
 		fread(buffer, sizeof(char), len, file);
 
 		fclose(file);
@@ -30,11 +31,12 @@ File<u8> Platform::read_entire_binary_file(const std::string& file_path) {
 	FILE* file = fopen(file_path.c_str(), "rb");
 
 	if(file) {
-		auto len = fseek(file, 0, SEEK_END);	
-		buffer = allocate<u8>(len);		
+		fseek(file, 0, SEEK_END);	
+		u32 len = ftell(file);
 		rewind(file);
 
-		fread(buffer, sizeof(u8), len, file);
+		buffer = allocate<u8>(len);
+		fread(buffer, sizeof(char), len, file);
 
 		fclose(file);
 
