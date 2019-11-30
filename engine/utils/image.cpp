@@ -28,7 +28,8 @@ namespace res {
 		auto file = Platform::read_entire_binary_file(file_path);
 
 		i32 x, y, channels;
-
+	
+		stbi_set_flip_vertically_on_load(1);
 		u8* buffer = stbi_load_from_memory(file.content, file.length, &x, &y, &channels, STBI_rgb_alpha);
 
         auto image = allocate<u8>(x * y * 4);
@@ -119,5 +120,6 @@ namespace res {
                     return Image(width, height, nullptr, format);
             }
         }
+		return Image(0, 0, nullptr, format);
     }
 }

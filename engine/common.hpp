@@ -76,9 +76,11 @@ inline void log_trace(const char* function, u32 line, const Msg& msg, Args... ar
 }
 
 
-std::ostream& operator<< (std::ostream& _out, const glm::vec4& _v);
-std::ostream& operator<< (std::ostream& _out, const glm::vec3& _v);
-std::ostream& operator<< (std::ostream& _out, const glm::vec2& _v);
+std::ostream& operator<< (std::ostream& out, const glm::vec4& v);
+std::ostream& operator<< (std::ostream& out, const glm::vec3& v);
+std::ostream& operator<< (std::ostream& out, const glm::vec2& v);
+
+std::ostream& operator<< (std::ostream& out, const glm::mat4& v);
 
 void glCheck_(const char* file, const char* function, u32 line);
 

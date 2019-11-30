@@ -37,6 +37,7 @@ file(GLOB_RECURSE HEADER_LIST
 
 message(STATUS "Sources found ${SOURCE_LIST} ${HEADER_LIST}")
 
+add_compile_definitions(OPEN_GL)
 add_library(${PROJECT_NAME} ${SOURCE_LIST} ${HEADER_LIST})
 
 target_link_libraries(${PROJECT_NAME}

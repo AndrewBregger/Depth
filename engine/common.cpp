@@ -60,3 +60,14 @@ std::ostream& operator<< (std::ostream& out, const glm::vec2& v) {
   out << v.x  << " " << v.y;
   return out;
 }
+
+std::ostream& operator<< (std::ostream& out, const glm::mat4& v) {
+	for (u32 i = 0; i < 4; ++i) {
+		for (u32 j = 0; j < 4; ++j) {
+			out << v[j][i] << " ";
+		}
+		out << std::endl;
+	}
+
+	return out;
+}

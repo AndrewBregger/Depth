@@ -46,6 +46,10 @@ namespace res {
 
 		inline u32 get_height();
 
+		inline u32 get_width() const;
+
+		inline u32 get_height() const;
+
 		inline u8* get_buffer();
 
 		inline PixelFormat get_format();
@@ -56,6 +60,14 @@ namespace res {
 	}
 
 	inline u32 Image::get_height() {
+		return height;
+	}
+
+	inline u32 Image::get_width() const {
+		return width;
+	}
+
+	inline u32 Image::get_height() const {
 		return height;
 	}
 

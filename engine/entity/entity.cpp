@@ -9,7 +9,7 @@ namespace entity {
 
 	void Entity::update(f32 delta) {}
 	
-	void Entity::on_render() {}
+	void Entity::on_render(gfx::Renderer* renderer) {}
 
 	void Entity::add_component(Component* component) {
 		components.push_back(component);
