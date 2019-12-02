@@ -5,12 +5,6 @@
 #include "texture.hpp"
 #include <functional>
 
-namespace std {
-	template <>
-	struct hash<std::pair<u32, u32>> {
-		size_t operator() (const std::pair<u32, u32>& val) const;
-	};
-}
 
 namespace gfx {
 	class TextureAtlas : public Texture {
@@ -19,21 +13,21 @@ namespace gfx {
 			///
 			/// Texture atlas does not start with any data.
 			TextureAtlas(u32 width, u32 height, PixelFormat format);
-		
+
 			/// add an image to the atlas.
 			bool add_image(const res::Image& image);
-			
+
 			/// retrieve texture coordinates for an image to (x, y)
 			glm::vec4* get_image_at(u32 x, u32 y);
 
 		private:
-			
+
 			/// determine if the next image will fit
 			bool should_advance(const res::Image& image);
-		
+
 			/// move the y position up the image.
 			void next_line();
-			
+
 			/// Reprsents a single image in the atlas.
 			struct ImageInfo {
 				/// Used for looking up the image.
@@ -50,7 +44,7 @@ namespace gfx {
 				/// height of the image in texture coordinate space
 				f32 delta_v;
 			};
-				
+
 			u32 sub_x;
 
 			u32 sub_y;

@@ -1,12 +1,5 @@
 #include "texture_atlas.hpp"
 
-
-namespace std {
-	size_t hash<std::pair<u32, u32>>::operator() (const std::pair<u32, u32>& val) const {
-		return std::hash<u32>()(val.first) ^ std::hash<u32>()(val.second);
-	}
-}
-
 namespace gfx {
 	TextureAtlas::TextureAtlas(u32 width, u32 height, PixelFormat format) :
 		Texture(width, height, format), sub_x(0), sub_y(0), max_height(0),
@@ -26,11 +19,11 @@ namespace gfx {
 
 		bind();
 		// add the image to the gl texture.
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 
+		glTexSubImage2D(GL_TEXTURE_2D, 0,
 						sub_x, sub_y, image.get_width(), image.get_height(),
 						GL_RGBA, GL_UNSIGNED_BYTE, image.buffer);
 		unbind();
-		
+
 		// create the ImageInfo data structure.
 		auto info = ImageInfo {
 			x_index,
@@ -42,8 +35,8 @@ namespace gfx {
 		};
 
 		image_info.emplace(std::make_pair(x_index, y_index), info);
-		
-		
+
+
 		sub_x += image.get_width();
 		++x_index;
 
@@ -52,7 +45,7 @@ namespace gfx {
 		}
 		return true;
 	}
-	
+
 	glm::vec4* TextureAtlas::get_image_at(u32 x, u32 y) {
 		auto image_info_iter = image_info.find(std::make_pair(x, y));
 		if (image_info_iter != image_info.end()) {

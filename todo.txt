@@ -1,0 +1,25 @@
+1. Handle input properly by maintaining the states from the previous
+   frame. Or just if something must update on the event, it must listen
+   for the event. If is reads the value from Input then it should have a
+   stride that isn't too large.
+2. Implement SpriteSheet as an asset.
+3. Draw some basic world sprite and character sprites for testing.
+	a. dirt
+	b. grass
+	c. water
+	d. placable stone wall.
+
+4. 'App' abstraction for storing all of the "global" structures and
+   running the main game loop.
+5. Implement Render loop and event loop threads. These should probably
+   be sync to something.
+6. Create a basic world structure (should it be chucked or just store
+   all of it)
+   a. Momory efficent if only the visible chuncks for the world are
+   loaded into memory and updated. Doing would allow for more entities
+   within the world but might break some of the liveliness of the world.
+   b. Storeing all of it can be expensive but it will allow for the
+   entire work to be updated such that event entities off screen can
+   be dynamic. Also it will allow for moving transitions between
+   abitrary places on the map.
+7. 

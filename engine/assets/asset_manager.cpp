@@ -4,18 +4,19 @@
 #include "gfx/shader.hpp"
 #include "gfx/texture.hpp"
 #include "gfx/texture_atlas.hpp"
+#include "gfx/spritesheet.hpp"
 
 #include <algorithm>
 
 namespace assets {
     AssetManager::AssetManager() = default;
-    
+
     AssetId AssetManager::load_texture(const std::string& path) {
         LOG_MSG("LOADING texture: {}", path);
         auto image = res::Image::from_file(path);
         auto texture = new gfx::Texture(image);
         assets.emplace(texture->get_id(), texture);
-        
+
         return texture->get_id();
     }
 
@@ -33,27 +34,37 @@ namespace assets {
         assets.emplace(texture->get_id(), texture);
 		return texture->get_id();
 	}
-    
+
+    // loads and creates a sprite sheet.
+    AssetId AssetManager::load_spritesheet(const SpriteSheetInfo& sheet_info) {
+        LOG_MSG("LOADING SpriteSheet: {}", sheet_info.path);
+        auto image = res::Image::from_file(sheet_info.path);
+
+        auto sheet = new gfx::SpriteSheet(image, sheet_info.dem);
+        assets.emplace(sheet->get_id(), sheet);
+        return sheet->get_id();
+    }
+
     AssetId AssetManager::load_font(const std::string& path) {
         LOG_MSG("LOADING font: {}", path);
         return 0;
     }
-    
+
     AssetId AssetManager::load_shader(const ShaderInfo& info) {
         LOG_MSG("LOADING shader: {}", info.name);
         auto shader = new gfx::Shader(info.name, info.vs, info.fs, info.gs);
         assets.emplace(shader->get_id(), shader);
         return shader->get_id();
     }
-    
+
     AssetId AssetManager::load_audio() {
         return 0;
     }
-    
+
     Asset* AssetManager::get_asset(AssetId id) {
         if (id == 0)
             return nullptr;
-        
+
         auto asset_iter = assets.find(id);
         if (asset_iter != assets.end()) {
             return asset_iter->second.get();

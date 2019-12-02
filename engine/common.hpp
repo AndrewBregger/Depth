@@ -133,4 +133,12 @@ u32 gl_pixel_format(PixelFormat);
 
 PixelFormat pixel_format(u32 format);
 
+
+namespace std {
+	template <>
+	struct hash<std::pair<u32, u32>> {
+		size_t operator() (const std::pair<u32, u32>& val) const;
+	};
+}
+
 #endif

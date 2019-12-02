@@ -17,7 +17,7 @@ void glCheck_(const char* file, const char* function, u32 line) {
             case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION";
             break;
         }
-        
+
         LOG_ERR("{}:{}|{} {}", file, line, function, error);
     }
 }
@@ -70,4 +70,10 @@ std::ostream& operator<< (std::ostream& out, const glm::mat4& v) {
 	}
 
 	return out;
+}
+
+namespace std {
+	size_t hash<std::pair<u32, u32>>::operator() (const std::pair<u32, u32>& val) const {
+		return std::hash<u32>()(val.first) ^ std::hash<u32>()(val.second);
+	}
 }
