@@ -1,0 +1,17 @@
+[2019-11-29 16:01:10.219] [info] App Start
+1000, 800
+[2019-11-29 16:01:10.277] [info] App Setup
+[2019-11-29 16:01:10.277] [info] Post Setup
+[2019-11-29 16:01:10.277] [info] LOADING texture atlas ./res/test.jpg
+[2019-11-29 16:01:10.338] [info] LOADING texture atlas ./res/stone2.png
+[2019-11-29 16:01:10.374] [info] LOADING shader: quad
+glDrawElementsInstanced: 0x7fa0c0c12940
+glUseProgram: 0x7fa0c0c245a0
+glBindTexture: 0x7fa0c0c0eb20
+glMapBuffer: 0x7fa0c0c1a340
+glDrawElements: 0x7fa0c0c128a0
+glBindBuffer: 0x7fa0c0c0e660
+glBindVertexArray: 0x7fa0c0c0ec20
+glUnmapBuffer: 0x7fa0c0c24480
+glGetError: 0x7fa0c0c15520
+FPS: 28.9929

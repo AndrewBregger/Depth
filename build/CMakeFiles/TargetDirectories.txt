@@ -1,0 +1,7 @@
+/home/andy/Projects/ashes/build/CMakeFiles/rebuild_cache.dir
+/home/andy/Projects/ashes/build/CMakeFiles/ashes.dir
+/home/andy/Projects/ashes/build/CMakeFiles/edit_cache.dir
+/home/andy/Projects/ashes/build/engine/CMakeFiles/edit_cache.dir
+/home/andy/Projects/ashes/build/engine/CMakeFiles/GLAD.dir
+/home/andy/Projects/ashes/build/engine/CMakeFiles/rebuild_cache.dir
+/home/andy/Projects/ashes/build/engine/CMakeFiles/engine.dir

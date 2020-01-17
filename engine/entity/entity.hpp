@@ -16,7 +16,7 @@ namespace entity {
     
 	struct Transform {
 		/// game world position
-		glm::vec2 position;
+		glm::vec3 position;
 		/// game world rotation
 		f32 rotation;
 		/// entity scale.
@@ -35,7 +35,7 @@ namespace entity {
 		
         /// update this entity for the next frame.
         /// delta: the change in time for this update. 
-        virtual void update(f32 delta);
+        virtual void update();
         
         /// how this entity should be shown.
         virtual void on_render(gfx::Renderer* renderer);
@@ -44,7 +44,7 @@ namespace entity {
         inline const Transform& transform();
 		
         /// sets position of entity in world space.
-        inline void set_position(const glm::vec2& position);
+        inline void set_position(const glm::vec3& position);
 		
         /// sets rotation of the entity relative to center (maybe give anchor)
         inline void set_rotation(f32 theta);
@@ -172,7 +172,7 @@ namespace entity {
 		return world_transform;
 	}
     
-	inline void Entity::set_position(const glm::vec2& position) {
+	inline void Entity::set_position(const glm::vec3& position) {
 		world_transform.position = position;
 	}
     

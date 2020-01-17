@@ -213,9 +213,16 @@ namespace event {
 		static glm::ivec2 window_resize();
         
 		static glm::ivec2 framebuffer_resize();
+
+		static f64 get_delta();
         
+		static void set_delta(f64 delta);
+
         static void new_frame();
+
 		void reset();
+
+	
         
         /// Returns the MouseButton from the given glfw mouse button
 		inline static MouseButton from_glfw_button(GLFWMouseButton glfw_button) {
@@ -237,6 +244,7 @@ namespace event {
         
 		glm::ivec2 window_size{0, 0};
 		glm::ivec2 framebuffer_size{0, 0};
+		f64 delta_time{0.0};
         
 		//friend class EventManager;
 	};

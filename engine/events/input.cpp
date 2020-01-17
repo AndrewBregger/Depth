@@ -68,6 +68,15 @@ namespace event {
                                              mouse_state.press_location);
 		}
 	}
+
+
+	f64  Input::get_delta() {
+		return Input::get()->delta_time;
+	}
+
+	void Input::set_delta(f64 delta) {
+		Input::get()->delta_time = delta;
+	}
     
     void Input::new_frame() {
         Input::get()->reset();

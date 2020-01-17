@@ -33,10 +33,10 @@ namespace gfx {
 		
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * indices.size(), indices.data(), GL_STATIC_DRAW);
 		
-		u64 attributeSizes[] = {4, 4, 4, 1};
+		u64 attributeSizes[] = {3, 2, 2, 2, 4, 1};
 		u64 stride = 0;
 		
-		for(u32 i = 0; i < 4; ++i) {
+		for(u32 i = 0; i < 6; ++i) {
 			glVertexAttribPointer(i, attributeSizes[i], GL_FLOAT, GL_FALSE, sizeof(Batch::RenderInstanceData), (void*) (stride * sizeof(f32)));
 			glEnableVertexAttribArray(i);
 			// glVertexAttribDivisor(i, 1);

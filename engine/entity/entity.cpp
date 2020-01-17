@@ -7,7 +7,7 @@ namespace entity {
 
 	Entity::~Entity() = default;
 
-	void Entity::update(f32 delta) {}
+	void Entity::update() {}
 	
 	void Entity::on_render(gfx::Renderer* renderer) {}
 
